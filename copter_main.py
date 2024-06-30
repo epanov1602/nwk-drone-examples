@@ -9,10 +9,6 @@ import videocopter
 
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
-
-#from ultralytics import YOLO
-#model = YOLO("resources/yolov8s.pt")
-
 tracker = detection.create_vit_tracker()
 
 
@@ -32,6 +28,11 @@ def main():
             drone.land()  # L = land
         elif key == ord('t'):
             drone.takeoff()  # T = takeoff
+        elif key == ord('w'):
+            drone.move_forward(50)  # 50 centimeters
+        elif key == ord('s'):
+            drone.move_back(50)  # 50 centimeters
+
 
         # 1. read one video frame from the camera
         frame = drone.get_frame_read().frame
@@ -43,12 +44,12 @@ def main():
         x, y, w, h = None, None, None, None
 
         # -- if saw it before and didn't lose it, just track the existing object by updating the tracker
-        if time_last_seen != 0:
-            x, y, w, h = detection.update_tracker(tracker, frame)
-            if x is not None:
-                time_last_seen = time()  # if track is not lost, update the "last time seen"
-            elif time() > time_last_seen + 1.0:
-                time_last_seen = 0  # if track was lost for more than 1s, assume we can no longer track it
+        #if time_last_seen != 0:
+        #    x, y, w, h = detection.update_tracker(tracker, frame)
+        #    if x is not None:
+        #        time_last_seen = time()  # if track is not lost, update the "last time seen"
+        #    elif time() > time_last_seen + 1.0:
+        #        time_last_seen = 0  # if track was lost for more than 1s, assume we can no longer track it
 
         # -- detect a new object, if never saw it (or lost it)
         if x is None:
