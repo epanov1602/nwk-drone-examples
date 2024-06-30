@@ -1,0 +1,5 @@
+opencv-python~=4.10.0.84
+djitellopy2~=2.3
+pigpio~=1.78
+numpy~=2.0.0
+flask~=3.0.3
