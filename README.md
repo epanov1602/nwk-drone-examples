@@ -17,6 +17,7 @@ Most professional python developers use PyCharm or VSCode, we'll be using PyChar
 
 
 * Then, clone (download) this code onto your computer by doing this
+
 ![guide/git-clone.png](guide/git-clone.png)
 
 and please use the GitHub URL of this project: `git@github.com:epanov1602/nwk-drone-examples.git`
@@ -24,12 +25,14 @@ and please use the GitHub URL of this project: `git@github.com:epanov1602/nwk-dr
 
 
 * When the code download ("git clone") is completed, you will see code files (modules) organized this way in your PyCharm:
+
 ![guide/project.png](guide/project.png)
 
 ^^ click on `requirements.txt`
 
 
 * Once the requirements file opens, right-click on any of the lines in it (for example, `djitellopy2`) and you'll be offered to install all the packages that are needed for this code to work -- you can agree and install
+
 ![guide/requirements.png](guide/requirements.png)
 
 
