@@ -10,8 +10,8 @@ import videocopter
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
 
-from ultralytics import YOLO
-model = YOLO("resources/yolov8s.pt")
+#from ultralytics import YOLO
+#model = YOLO("resources/yolov8s.pt")
 
 tracker = detection.create_vit_tracker()
 
