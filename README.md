@@ -1,4 +1,10 @@
-# Newark Drone Coders, examples 1
+# Welcome to Newark Drone Coders
+Best is to follow this video at first:
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LmEcyQnfpDA/0.jpg)](https://www.youtube.com/watch?v=LmEcyQnfpDA)
+
+
+But then, it's time for an "expression session"! Below are just some examples.
 
 ## Getting started
 
