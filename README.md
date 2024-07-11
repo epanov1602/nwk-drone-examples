@@ -50,21 +50,26 @@ and once the requirements file opens, right-click on any of the lines in it (for
 
 ## Running the examples
 
-* `car_main.py`, `copter_main.py` and `laptop_main.py` are modules (code files) that you can run in order to
+* If you click on the Project button in PyCharm, you can see which python code files ("modules") are already here
+
+![project-view.png](guide/project-view.png)
+
+
+* Here `car_main.py`, `copter_main.py` and `laptop_main.py` are modules (code files) that you can run in order to
   * drive a car with camera
   * fly a copter with camera
   * just play with your laptop camera
 
-* we will be changing them in order to accomplish different things
+* We will be changing them in order to accomplish different things
 
-* other modules contain various functions that are handy to have (for example, recognizing an AprilTag, or driving)
+* Other modules contain various functions that are handy to have (for example, recognizing an AprilTag, or driving)
 
 
 ## Example 1D (flying the drone with buttons)
 
 In `copter_main.py` replace everything with this code:
 
-```python:
+```python
 from djitellopy import Tello
 import cv2
 
@@ -101,7 +106,7 @@ if __name__ == "__main__":
 
 In `car_main.py` replace everything with this code:
 
-```python:
+```python
 import cv2
 import videocar
 
@@ -130,7 +135,7 @@ while True:
 
 In `copter_main.py` replace everything with this code:
 
-```python:
+```python
 from djitellopy import Tello
 
 import cv2
