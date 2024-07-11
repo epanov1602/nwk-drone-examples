@@ -121,14 +121,16 @@ while True:
     elif key == ord(' '):
         videocar.set_arcade_drive(forward_speed=0, right_turn_speed=0)
 
-    # get a video frame
+    # get a video frame from car camera
     frame = videocar.get_video_frame()
     if frame is None:
         continue  # no frame
 
-    # show it in a window
+    # show it in car's web video feed
+    videocar.display_web_video_frame(frame)
+    
+    # and show same frame in video window
     cv2.imshow("car", frame)
-    videocar.display_video_frame(frame)
 ```
 
 ## Example 2D (chasing an AprilTag with drone)
@@ -140,12 +142,15 @@ from djitellopy import Tello
 
 import cv2
 import pupil_apriltags as apriltags
+#from ultralytics import YOLO
 from time import time
 
 import detection
 import videocopter
 
+# what kind of objects can we detect?
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
+#model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
 tracker = detection.create_vit_tracker()
 
@@ -192,8 +197,8 @@ def main():
         # -- detect a new object, if never saw it (or lost it)
         if x is None:
             x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame)
-            # x, y, w, h = utils.detect_biggest_face(face_detector, frame)
-            # x, y, w, h = utils.detect_yolo_object(model, frame, valid_classnames={"sports ball"}, lowest_conf=0.3)
+            # x, y, w, h = detection.detect_biggest_face(face_detector, frame)
+            # x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames={"sports ball"}, lowest_conf=0.3)
 
             if x is not None:  # if detected something, reset the tracker with this new object to track
                 tracker.init(frame, (x, y, w, h))

@@ -1,16 +1,16 @@
 import cv2
 import pupil_apriltags as apriltags
+#from ultralytics import YOLO
 from time import time, sleep
 
 import detection
 import videocar
 
-tracker = detection.create_vit_tracker()
+# what kind of objects can we detect?
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
+#model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
-
-#from ultralytics import YOLO
-#model = YOLO("resources/yolov8s.pt")
+tracker = detection.create_vit_tracker()
 
 
 videocar.start(
@@ -98,6 +98,6 @@ while True:
     status = "CHASING (press SPACE to stop)" if chasing else "NOT CHASING (press C to chase)"
     cv2.putText(frame, status, (5, frame.shape[0] - 15), cv2.FONT_HERSHEY_PLAIN, 2, detection.GREEN, 2)
 
-    videocar.display_video_frame(frame)
+    videocar.display_web_video_frame(frame)
     cv2.imshow("car", frame)
 

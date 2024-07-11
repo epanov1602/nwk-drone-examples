@@ -50,7 +50,7 @@ def stop_all_motors():
     robot_container.stop_all_motors()
 
 
-def display_video_frame(f, comment=None):
+def display_web_video_frame(f, comment=None):
     assert robot_container is not None, "videotank.start() must be called first"
     robot_container.display_video_frame(f, comment)
 

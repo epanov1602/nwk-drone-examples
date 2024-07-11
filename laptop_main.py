@@ -1,14 +1,13 @@
 import cv2
 from time import time
 import pupil_apriltags as apriltags
+from ultralytics import YOLO
 import detection
 
+# what kind of objects can we detect?
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
+#model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
-
-#from ultralytics import YOLO
-#model = YOLO("resources/yolov8s.pt")
-
 tracker = detection.create_vit_tracker()
 
 
@@ -29,8 +28,8 @@ while True:
 
     if detecting:
         x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame)
-        #x, y, w, h = object_detection.detect_biggest_face(face_detector, frame)
-        #x, y, w, h = object_detection.detect_yolo_object(model, frame, valid_classnames={"cell phone"}, lowest_conf=0.3)
+        #x, y, w, h = detection.detect_biggest_face(face_detector, frame)
+        #x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames={"cell phone"}, lowest_conf=0.3)
         if x is not None:  # if detected something, feed it into the tracker
             tracker.init(frame, (x, y, w, h))
             time_last_seen = time()
