@@ -97,9 +97,6 @@ while True:
     frame_width = frame.shape[1]
     cv2.imshow('drone video', frame)
 
-if __name__ == "__main__":
-    main()
-
 ```
 
 ## Example 1C (driving the car with buttons)
@@ -154,13 +151,15 @@ face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
 tracker = detection.create_vit_tracker()
 
-
 drone = Tello()
 drone.connect()
 drone.streamon()
 
+# set desired speed to zero (at least before takeoff)
+drone.send_rc_control(0, 0, 0, 0)  # command zero velocity
 
-def main():
+
+def follow_object():
     last_seen_x = None
     time_last_seen = 0
 
@@ -175,7 +174,6 @@ def main():
             drone.move_forward(50)  # 50 centimeters
         elif key == ord('s'):
             drone.move_back(50)  # 50 centimeters
-        
 
         # 1. read one video frame from the camera
         frame = drone.get_frame_read().frame
@@ -188,7 +186,7 @@ def main():
 
         ## WARNING: it is better to uncomment the code below to use tracker (so you don't lost track of object)
         #if time_last_seen != 0:
-        #    x, y, w, h = detection.update_tracker(tracker, frame)
+        #    x, y, w, h = detection.update_tracker(tracker, frame, lowest_allowed_score=0.55)
         #    if x is not None:
         #        time_last_seen = time()  # if track is not lost, update the "last time seen"
         #    elif time() > time_last_seen + 1.0:
@@ -198,35 +196,54 @@ def main():
         if x is None:
             x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame)
             # x, y, w, h = detection.detect_biggest_face(face_detector, frame)
-            # x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames={"sports ball"}, lowest_conf=0.3)
+            # x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames={"cell phone"}, lowest_conf=0.3)
 
             if x is not None:  # if detected something, reset the tracker with this new object to track
                 tracker.init(frame, (x, y, w, h))
                 time_last_seen = time()
 
         # 3. make decisions
-        status = ""
+        status = "NEVER SAW"
+
         if x is not None:
             # if object is seen, set speed towards it
-            status = "CHASING"
-            videocopter.drone_follow_object_pids(drone, frame, bbox=(x, y, w, h))
             last_seen_x = x
+            status = "CHASING"
+            if drone.is_flying:
+                videocopter.drone_follow_object_pids(drone, frame, bbox=(x, y, w, h))
+                if w >= 0.2 * frame_width and drone.is_flying:  # but if the object is very close, object is reached
+                    status = "REACHED"
+
         elif last_seen_x is not None:
             # if not seen, try to slowly turn (ideally, in the direction where object was last seen)
             status = "SEEKING"
             seek_turn_speed = +50  # seek to the right by default
             if last_seen_x is not None and last_seen_x < frame_width / 2:
                 seek_turn_speed = -50  # seek left if last saw it on the left
-            drone.send_rc_control(0, 0, 0, seek_turn_speed)
+            if drone.is_flying:
+                drone.send_rc_control(0, 0, 0, seek_turn_speed)
 
         # 4. print the status info on the video frame, and then show that frame
-        status = f"bat: {drone.get_battery()}%, alt: {drone.get_distance_tof()}, width: {w}, " + status
-        cv2.putText(frame, status, (5, 25), cv2.FONT_HERSHEY_PLAIN, 2, detection.GREEN, 2)
+        status_text = f"bat: {drone.get_battery()}%, alt: {drone.get_distance_tof()}, width: {w}, " + status
+        cv2.putText(frame, status_text, (5, 25), cv2.FONT_HERSHEY_PLAIN, 2, detection.GREEN, 2)
+
+        # 5. and show that frame
         cv2.imshow('drone video', frame)
 
+        # 6. finally, if status is "REACHED", land and break out of this loop
+        if status == "REACHED":
+            drone.send_rc_control(0, 0, 0, 0)  # command zero velocity
+            cv2.waitKey(1)  # show the last frame of the video
+            break
 
-if __name__ == "__main__":
-    main()
+
+# the object following code is in this follow_object() function here, so we can call it many times
+# (for example, if we first want to follow one object and then another)
+follow_object()
+
+# and after we return from follow_object() function, land the drone if it was flying
+if drone.is_flying:
+    drone.land()
 
 ```
 
