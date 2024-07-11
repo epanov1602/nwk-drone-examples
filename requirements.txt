@@ -4,4 +4,7 @@ djitellopy2~=2.3
 pigpio~=1.78
 numpy~=1.26.4
 flask~=3.0.3
+yt-dlp
+easy-yt-dlp-py
+
 # ultralytics~=8.2.53

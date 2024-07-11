@@ -189,3 +189,18 @@ def to_relative_xyw(frame, x, y, w, h):
     relative_y = relative_y - 0.1  # when copter is flying forward, nose is tilted down a bit, account for it
     return relative_x, relative_y, relative_width
 
+
+def download_video(url):
+    import tempfile
+    import ytdlpy
+    import os
+    file = "./" + url.split("=")[-1].split("/")[-1] + ".mp4"
+    if os.path.exists(file):
+        return file
+    with tempfile.TemporaryDirectory() as tempdir:
+        ytdlpy.ytdlpy(tempdir, "mp4", url)
+        files = [os.path.join(tempdir, f) for f in os.listdir(tempdir) if f.endswith(".mp4")]
+        if len(files) == 0:
+            return None
+        os.rename(files[-1], file)
+        return file
