@@ -13,7 +13,12 @@ tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
 #model = YOLO("resources/yolov8s.pt")
 
 
-videocar.start(simulation=False, motor_directions=(-1, -1), video_direction=-1)
+videocar.start(
+    simulation=False,
+    motor_directions=(-1, -1),
+    video_direction=-1,
+    #robot_hostname="localhost",  # if you want to use SSH tunnel (to go around firewall)
+)
 
 chasing = False
 tracking = False
@@ -93,6 +98,6 @@ while True:
     status = "CHASING (press SPACE to stop)" if chasing else "NOT CHASING (press C to chase)"
     cv2.putText(frame, status, (5, frame.shape[0] - 15), cv2.FONT_HERSHEY_PLAIN, 2, detection.GREEN, 2)
 
-    cv2.imshow("car", frame)
     videocar.display_video_frame(frame)
+    cv2.imshow("car", frame)
 

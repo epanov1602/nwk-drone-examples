@@ -8,32 +8,41 @@ But then, it's time for an "expression session"! Below are just some examples.
 
 ## Getting started
 
-* First you need to download and install
+Most professional python developers use PyCharm or VSCode, we'll be using PyCharm for now.
+
+* First you need to download and install four things
   * Git: https://git-scm.com/downloads
-  * PyCharm Community Edition: https://www.jetbrains.com/pycharm/download/
-
-Most professional python developers use PyCharm or VSCode, we'll be using PyCharm).
-
-
-
-* Then, clone (download) this code onto your computer by doing this
-
-![guide/git-clone.png](guide/git-clone.png)
-
-and please use the GitHub URL of this project: `git@github.com:epanov1602/nwk-drone-examples.git`
+  * Python 3.9: https://www.python.org/downloads/release/python-3913/
+  * free PyCharm Community Edition (not Professional): https://www.jetbrains.com/pycharm/download/
+  * And Microsoft Visual C++ Build Tools: https://aka.ms/vs/17/release/vs_BuildTools.exe
 
 
+* When installing Microsoft BuildTools, simply pick C++:
 
-* When the code download ("git clone") is completed, you will see code files (modules) organized this way in your PyCharm:
-
-![guide/project.png](guide/project.png)
-
-^^ click on `requirements.txt`
+![guide/BuildTools.png](guide/build-tools.png)
 
 
-* Once the requirements file opens, right-click on any of the lines in it (for example, `djitellopy2`) and you'll be offered to install all the packages that are needed for this code to work -- you can agree and install
+* Start your PyCharm which you just installed and "clone" (download) this code onto your computer by doing this
 
-![guide/requirements.png](guide/requirements.png)
+![git-clone.png](guide/git-clone.png)
+
+you can simply use this URL: `https://github.com/epanov1602/nwk-drone-examples`
+
+
+
+* And when the code download ("git clone") is completed, you will be offered to choose your Python version
+
+![choose-python39.png](guide/choose-python39.png)
+
+^^ let's choose python 3.9 that you just downloaded and wait until various modules from requirements.txt download and install
+
+
+* It something didn't go well, you can manually click on `requirements.txt`
+![project.png](guide/project.png)
+
+and once the requirements file opens, right-click on any of the lines in it (for example, `djitellopy2`) and you'll be offered to install all the packages that are needed for this code to work -- you can agree and install
+
+![requirements.png](guide/requirements.png)
 
 
 * After that installation is done, you should be in good shape to run this drone code!
@@ -55,7 +64,7 @@ and please use the GitHub URL of this project: `git@github.com:epanov1602/nwk-dr
 
 In `copter_main.py` replace everything with this code:
 
-```
+```python:
 from djitellopy import Tello
 import cv2
 
@@ -92,7 +101,7 @@ if __name__ == "__main__":
 
 In `car_main.py` replace everything with this code:
 
-```
+```python:
 import cv2
 import videocar
 
@@ -121,7 +130,7 @@ while True:
 
 In `copter_main.py` replace everything with this code:
 
-```
+```python:
 from djitellopy import Tello
 
 import cv2

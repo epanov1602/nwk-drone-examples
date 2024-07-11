@@ -88,6 +88,8 @@ def start(simulation=False, robot_hostname=None, motor_directions=(1, 1,), video
         # no robot hostname, if running in simulation
     else:
         in_simulation = False
+        if robot_hostname == "localhost":
+            print(f"videocar.start(robot_hostname='localhost'): did you also start an SSH tunnel? (ssh -L 8887:{HOSTNAME}:8888 -L 8000:{HOSTNAME}:8000 cupcake@raspberrypi)")
         robot_container = RobotContainer(
             motor_directions=motor_directions,
             video_direction=video_direction,
@@ -241,9 +243,9 @@ class RobotContainer:
             print("pins not connected, because we are in simulation")
             self.pins = None
         else:
-            self.pins = pigpio.pi() if THIS_HOST == HOSTNAME else pigpio.pi(HOSTNAME, 8887)
+            self.pins = pigpio.pi() if THIS_HOST == hostname else pigpio.pi(hostname, 8887)
             print("pins {}".format("CONNECTED" if self.pins.connected else "NOT CONNECTED"))
-            self.camera = cv2.VideoCapture("tcp://" + HOSTNAME + ":8000")
+            self.camera = cv2.VideoCapture("tcp://" + hostname + ":8000")
             assert self.pins.connected, "pins were not connected successfully"
         self.frame_to_display = None
         self.points_clicked = []
