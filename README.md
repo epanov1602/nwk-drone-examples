@@ -1,11 +1,16 @@
 # Welcome to Newark Drone Coders
 New to programming?
+
 To get some basic training, we all played this awesome programming game, try it:
 [Python CodeCombat](https://codecombat.com/students?_cc=ChairTypeCool)
 .
 
+
 Once you reached the middle of CodeCombat level Computer Science 3 ... you are absolutely ready to get your own Tello drone and proceed to coding it
 (you can buy a Tello on eBay these days).
+
+
+Of course, you are also welcome to continue to play CodeCombat into much more advanced levels, becoming a bigger programming expert along the way.
 
 ## Ok, I have a Tello drone, now what?
 Best is to follow this video at first (lots of drone coding examples to try, step by step):
