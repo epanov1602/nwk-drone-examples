@@ -14,7 +14,7 @@ You can buy a Tello on eBay these days (you can buy used, but best is to get a "
 Of course, you are also welcome to continue to play CodeCombat into much more advanced levels, becoming a bigger programming expert along the way (not kidding, it is very good and can take you pretty far).
 
 ## Ok, I have a Tello drone, now what?
-Best is to follow this video at first (lots of drone coding examples to try, step by step):
+Once you have your own Tello, best is to follow this video at first (lots of drone coding examples to try, step by step):
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LmEcyQnfpDA/0.jpg)](https://www.youtube.com/watch?v=LmEcyQnfpDA)
 
