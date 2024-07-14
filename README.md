@@ -10,7 +10,7 @@ Once you reached the middle of CodeCombat level Computer Science 3 ... you are a
 (you can buy a Tello on eBay these days).
 
 
-Of course, you are also welcome to continue to play CodeCombat into much more advanced levels, becoming a bigger programming expert along the way.
+Of course, you are also welcome to continue to play CodeCombat into much more advanced levels, becoming a bigger programming expert along the way (not kidding, it is very good and can take you pretty far).
 
 ## Ok, I have a Tello drone, now what?
 Best is to follow this video at first (lots of drone coding examples to try, step by step):
