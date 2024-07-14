@@ -1,12 +1,26 @@
 # Welcome to Newark Drone Coders
-Best is to follow this video at first:
+New to programming?
+To get some basic training, we all played this awesome programming game, try it:
+[Python CodeCombat](https://codecombat.com/students?_cc=ChairTypeCool)
+.
+
+Once you reached the middle of CodeCombat level Computer Science 3 ... you are absolutely ready to get your own Tello drone and proceed to coding it
+(you can buy a Tello on eBay these days).
+
+## Ok, I have a Tello drone, now what?
+Best is to follow this video at first (lots of drone coding examples to try, step by step):
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LmEcyQnfpDA/0.jpg)](https://www.youtube.com/watch?v=LmEcyQnfpDA)
 
 
-But then, it's time for an "expression session"! Below are just some examples.
+Once you are done with the video above, it's time for an "expression session" -- using the more advanced examples below:
+ * programming a quadcopter drone,
+ * programming a four-wheel-drive car,
+ * or even a (virtual) military intercept vehicle.
 
-## Getting started
+You can modify them in any way you wish, to fully express yourself and your creativity.
+
+## Getting started with the advanced examples
 
 Most professional python developers use PyCharm or VSCode, we'll be using PyCharm for now.
 
@@ -65,7 +79,7 @@ and once the requirements file opens, right-click on any of the lines in it (for
 * Other modules contain various functions that are handy to have (for example, recognizing an AprilTag, or driving)
 
 
-## Example 1D (flying the drone with buttons)
+## Example 1D (flying a Tello drone with buttons)
 
 In `copter_main.py` replace everything with this code:
 
@@ -99,7 +113,7 @@ while True:
 
 ```
 
-## Example 1C (driving the car with buttons)
+## Example 1C (driving a 4 wheel drive car, with buttons)
 
 In `car_main.py` replace everything with this code:
 
