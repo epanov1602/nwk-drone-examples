@@ -17,7 +17,10 @@ Best is to follow this video at first (lots of drone coding examples to try, ste
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LmEcyQnfpDA/0.jpg)](https://www.youtube.com/watch?v=LmEcyQnfpDA)
 
+(huge thanks to Murtaza Hassan for taking his time to make the video).
 
+
+## Step two
 Once you are done with the video above, it's time for an "expression session" -- using the more advanced examples below:
  * programming a quadcopter drone,
  * programming a four-wheel-drive car,
