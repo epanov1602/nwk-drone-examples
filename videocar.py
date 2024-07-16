@@ -8,13 +8,28 @@ import pigpio
 import atexit
 import numpy as np
 
+# on host "raspberrypi" this should be installed
+"""
+## install pigpio (for *reliable* access to GPIO pins from python code)
+sudo apt-get install pigpio
+
+## install socat (for forwarding external traffic to pigpio)
+sudo apt-get install socat
+
+## make sure that pigpio service starts as daemon (pigpiod) every time when Pi boots up
+sudo systemctl enable pigpiod
+
+"""
+
 # these two lines must be found in /etc/rc.local on host "raspberrypi"
 # (also socat must be installed, and pigpiod must be running as service)
 """
-/usr/bin/socat tcp-listen:8887,reuseaddr,fork tcp:localhost:8888 &
+/usr/bin/socat tcp-listen:8887,reuseaddr,fork tcp:[::1]:8888 &
+## alternative: /usr/bin/socat tcp-listen:8887,reuseaddr,fork tcp:localhost:8888 &
 /home/{username}/run_camera.sh &
 """
 
+# here {username} is the username you use on that host: for example, pi
 #, where the /home/{username}/run_camera.sh has mode 777 and contains
 """
 #!/usr/bin/bash
@@ -24,6 +39,45 @@ do
   echo "Starting camera at `date` ..." > /var/log/libcamera-vid.log
   libcamera-vid -t 0 --codec mjpeg --framerate 20 --width 640 --height 480 --listen -o tcp://0.0.0.0:8000 >> /var/log/libcamera-vid.log 2>&1
 done
+"""
+
+
+"""
+## also, you need to open edit this file
+sudo nano /etc/dphys-swapfile
+
+## and set 
+CONF_SWAPSIZE=1024
+
+(otherwise there is not enough memory for the computer vision things that you can do when you deploy this code)
+"""
+
+
+"""
+## and finally, don't forget to go to
+sudo nano /boot/firmware/config.txt
+ 
+## and disable automatic camera detection
+camera_auto_detect=0
+
+## and and the end of that file add the setting related to the model of your camera sensor
+
+# either:
+dtoverlay=ov5647
+
+# or:
+dtoverlay=imx219
+
+# or:
+dtoverlay=imx519
+
+# or whichever camera sensor you have on your Pi camera
+
+## finally, you can always test if camera cable is connected to I2C by running IC2 address scanner:
+i2cdetect -y 10
+
+# ^^ you are supposed to see something that's not "--" on at least one of the addresses
+
 """
 
 
