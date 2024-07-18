@@ -143,7 +143,7 @@ def start(simulation=False, robot_hostname=None, motor_directions=(1, 1,), video
     else:
         in_simulation = False
         if robot_hostname == "localhost":
-            print(f"videocar.start(robot_hostname='localhost'): did you also start an SSH tunnel? (ssh -L 8887:{HOSTNAME}:8888 -L 8000:{HOSTNAME}:8000 cupcake@raspberrypi)")
+            print(f"videocar.start(robot_hostname='localhost'): did you also start an SSH tunnel? (ssh -L 8887:[::1]:8888 -L 8000:127.0.0.1:8000 cupcake@raspberrypi)")
         robot_container = RobotContainer(
             motor_directions=motor_directions,
             video_direction=video_direction,
@@ -156,7 +156,6 @@ def start(simulation=False, robot_hostname=None, motor_directions=(1, 1,), video
     sleep(0.1)
 
     # fast-forward the camera to the latest frame
-    print("camera {}".format("CONNECTED" if robot_container.camera.isOpened() else "NOT CONNECTED"))
     if robot_container.camera.isOpened():
         frame = robot_container.get_video_frame()
         print("obtained a frame from camera: {}".format(frame.shape if frame is not None else "(empty)"))
@@ -292,15 +291,30 @@ class RobotContainer:
         self.left_speed = 0.0
         self.recent_fps = 0.0
         self.last_get_video_frame_time = 0.0
-        if hostname is None:
-            self.camera = cv2.VideoCapture(0)
-            print("pins not connected, because we are in simulation")
-            self.pins = None
-        else:
+        self.pins = None
+
+        # connect the pins
+        while True:
+            if hostname is None:
+                print("pins not connected, because we are in simulation")
+                break
             self.pins = pigpio.pi() if THIS_HOST == hostname else pigpio.pi(hostname, 8887)
             print("pins {}".format("CONNECTED" if self.pins.connected else "NOT CONNECTED"))
+            if self.pins.connected:
+                break
+            sleep(1)  # sleep 1s before reconnecting
+
+        # connect the camera
+        while True:
+            if hostname is None:
+                self.camera = cv2.VideoCapture(0)  # using camera 0 in simulation
+                break
             self.camera = cv2.VideoCapture("tcp://" + hostname + ":8000")
-            assert self.pins.connected, "pins were not connected successfully"
+            print("camera {}".format("CONNECTED" if self.camera.isOpened() else "NOT CONNECTED"))
+            if self.camera.isOpened():
+                break
+            sleep(1)  # sleep 1s before reconnecting
+
         self.frame_to_display = None
         self.points_clicked = []
         self.buttons_clicked = []

@@ -17,7 +17,7 @@ videocar.start(
     simulation=False,
     motor_directions=(-1, -1),
     video_direction=-1,
-    #robot_hostname="localhost",  # if you want to use SSH tunnel (to go around firewall)
+#    robot_hostname="localhost",  # if you want to use SSH tunnel (to go around firewall)
 )
 
 chasing = False
