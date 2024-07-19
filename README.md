@@ -1,4 +1,9 @@
 # Welcome to Newark Drone Coders
+We are doing free-form meetups with no formal presentations, but simply exploring the steps below.
+
+And everything seems to go well!
+
+# Step one: learning to code
 New to programming?
 
 To get some basic training, we all played this awesome programming game, try it:
@@ -13,7 +18,7 @@ You can buy a Tello on eBay these days (you can buy used, but best is to get a "
 
 Of course, you are also welcome to continue to play CodeCombat into much more advanced levels, becoming a bigger programming expert along the way (not kidding, it is very good and can take you pretty far).
 
-## Ok, I have a Tello drone, now what?
+# Step two: so I have my Tello drone, now what?
 Once you have your own Tello, best is to follow this video at first (lots of drone coding examples to try, step by step):
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LmEcyQnfpDA/0.jpg)](https://www.youtube.com/watch?v=LmEcyQnfpDA)
@@ -21,7 +26,7 @@ Once you have your own Tello, best is to follow this video at first (lots of dro
 (huge thanks to Murtaza Hassan for taking his time to make the video).
 
 
-## Step two
+# Step three: advanced things without strict manuals
 Once you are done with the video above, it's time for an "expression session" -- using the more advanced examples below:
  * programming a quadcopter drone,
  * programming a four-wheel-drive car,
