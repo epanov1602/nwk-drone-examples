@@ -11,7 +11,7 @@ To get some basic training, we all played this awesome programming game, try it:
 .
 
 
-Once you reached the middle of CodeCombat level Computer Science 3 ... you are absolutely ready to get your own Tello drone and proceed to coding it!
+Once you reached the middle of CodeCombat level Computer Science 3 ... you are absolutely ready to get your own Tello drone (or CoDrone, or Zumi) and proceed to coding it!
 
 You can buy a Tello on eBay these days (you can buy used, but best is to get a "Tello Boost Combo" because it comes with extra batteries and some spare parts, both very important).
 
