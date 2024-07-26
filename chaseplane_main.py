@@ -1,4 +1,9 @@
+import torch
+import torchvision
 import cv2
+import os
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 from ultralytics import YOLO
 import detection
 
