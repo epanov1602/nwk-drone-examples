@@ -1,7 +1,11 @@
-import cv2
-import time
-import numpy as np
+from typing import Union
 
+import cv2
+import tempfile
+import ytdlpy
+import subprocess
+import os
+import numpy as np
 
 GREEN = (127, 255, 0)
 WHITE = (255, 255, 255)
@@ -190,15 +194,24 @@ def to_relative_xyw(frame, x, y, w, h):
     return relative_x, relative_y, relative_width
 
 
-def download_video(url):
-    import tempfile
-    import ytdlpy
-    import os
+
+def download_video(url: str):
+    """Download online video into local file"""
     file = "./" + url.split("=")[-1].split("/")[-1] + ".mp4"
     if os.path.exists(file):
         return file
     with tempfile.TemporaryDirectory() as tempdir:
-        ytdlpy.ytdlpy(tempdir, "mp4", url)
+
+        # Define the command to run
+        command = f"""yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b" {url}"""
+
+        # Check if the current system is Windows
+        if os.name == 'nt':
+            # For Windows, change to the directory using `cd` and then run the command
+            subprocess.run(f'cmd /C "cd {tempdir} && {command}"', shell=True)
+        else:
+            # For Unix-based systems, change to the directory using `cd` and then run the command
+            subprocess.run(f'cd {tempdir} && {command}', shell=True)
         files = [os.path.join(tempdir, f) for f in os.listdir(tempdir) if f.endswith(".mp4")]
         if len(files) == 0:
             return None

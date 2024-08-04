@@ -8,9 +8,9 @@ from ultralytics import YOLO
 import detection
 
 # some settings to play with, the goal is to not lose track -- can you tune them?
-MAX_FRAMES_WITHOUT_TRACKER_OBJECT_OBSERVED = 40
-VALID_OBJECT_CLASSES = {"airplane", "bird"}
-
+MAX_FRAMES_WITHOUT_TRACKER_OBJECT_OBSERVED = 300
+VALID_OBJECT_CLASSES = {"airplane", "bird", "kite"}
+LOWEST_CONF = 0.25
 # which video to download
 downloaded = detection.download_video("https://www.youtube.com/watch?v=IwrfLEw_aTw")
 
@@ -54,7 +54,7 @@ while True:
     key = cv2.waitKey(1) & 0xFF
 
     if not tracking or key == ord(' '):
-        x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames=VALID_OBJECT_CLASSES)
+        x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames=VALID_OBJECT_CLASSES, lowest_conf=LOWEST_CONF)
         cv2.imshow("video", frame)
         key = cv2.waitKey(1) & 0xFF
         if x is None:
