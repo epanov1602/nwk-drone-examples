@@ -1,5 +1,10 @@
+from typing import Union
+
 import cv2
-import time
+import tempfile
+import ytdlpy
+import subprocess
+import os
 import numpy as np
 
 
@@ -30,7 +35,7 @@ def create_vit_tracker(model_file="resources/object_tracking_vittrack_2023sep.on
     return cv2.TrackerVit.create(params)
 
 
-def update_tracker(tracker, frame, lowest_allowed_score=0.6):
+def update_tracker(tracker: cv2.Tracker, frame, lowest_allowed_score=0.6):
     """
     Update a tracker (with a new videoframe), assuming that the tracker has been initialized to track something
     :param tracker: the tracker to update
@@ -41,23 +46,19 @@ def update_tracker(tracker, frame, lowest_allowed_score=0.6):
     # will the tracker give us the updated bounding box?
     located, (tx, ty, tw, th) = tracker.update(frame)
     if located and tracker.getTrackingScore() >= lowest_allowed_score:
-
         # if tracking almost full screen now, assume that the tracker diverged
-        frame_width, frame_height = frame.shape[1], frame.shape[0]
-        problems = None
-
         # do we see any problems with the detection?
-        if th > 0.75 * frame_height or tw > 0.75 * frame_width:
+        if th > 0.75 * frame.shape[0] or tw > 0.75 * frame.shape[1]:
             problems = "diverged"  # looks too big, our tracker has diverged
-
-        text = problems if problems is not None else "trk conf: {:.2}".format(tracker.getTrackingScore())
+            text = problems
+        else:
+            problems = None
+            text = "trk conf: {:.2}".format(tracker.getTrackingScore())
         cv2.rectangle(frame, (tx, ty), (tx + tw, ty + th), PURPLE, 2)
         cv2.putText(frame, text, (tx + 10, ty - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, PURPLE, 2)
 
         if problems is None:
             return tx, ty, tw, th
-
-    # otherwise return (None, None, None, None)
     return None, None, None, None
 
 
@@ -167,7 +168,7 @@ def print_relative_xw(frame, x, y, w, h, color=BLUE):
         cv2.putText(frame, text, (x, y - 10), cv2.FONT_HERSHEY_PLAIN, 0.9, color)
 
 
-def to_relative_xyw(frame, x, y, w, h):
+def to_relative_xyw(frame: np.ndarray, x: Union[int, None], y: Union[int, None], w: Union[int, None], h: Union[int, None]):
     """
     Convert the x, y, width and height of a detected object into [-0.5; +0.5] space,
     so robot can use them in navigation
@@ -190,15 +191,23 @@ def to_relative_xyw(frame, x, y, w, h):
     return relative_x, relative_y, relative_width
 
 
-def download_video(url):
-    import tempfile
-    import ytdlpy
-    import os
+def download_video(url: str):
+    """Download online video into local file"""
     file = "./" + url.split("=")[-1].split("/")[-1] + ".mp4"
     if os.path.exists(file):
         return file
     with tempfile.TemporaryDirectory() as tempdir:
-        ytdlpy.ytdlpy(tempdir, "mp4", url)
+
+        # Define the command to run
+        command = f"""yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b" {url}"""
+
+        # Check if the current system is Windows
+        if os.name == 'nt':
+            # For Windows, change to the directory using `cd` and then run the command
+            subprocess.run(f'cmd /C "cd {tempdir} && {command}"', shell=True)
+        else:
+            # For Unix-based systems, change to the directory using `cd` and then run the command
+            subprocess.run(f'cd {tempdir} && {command}', shell=True)
         files = [os.path.join(tempdir, f) for f in os.listdir(tempdir) if f.endswith(".mp4")]
         if len(files) == 0:
             return None
