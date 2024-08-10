@@ -132,7 +132,7 @@ while True:
 ```
 
 
-## Example 3
+## Example 3 - ReMastered 
 This allows us to improve our object detection to "track the last detected"
 ```python
 import cv2
@@ -140,18 +140,21 @@ import pupil_apriltags as apriltags
 from time import time
 import detection
 import videocar
+from ultralytics import YOLO
 
 
 # what kind of objects can we detect? faces and tags
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
 tracker = detection.create_vit_tracker()
+model = YOLO("resources/yolov8m.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
+
 
 # connect to the car
 videocar.start(
-    simulation=True,
+    simulation=False,
     motor_directions=(-1, -1),
-    video_direction=1,
+    video_direction=-1,
     robot_hostname="localhost",  # if you want to use SSH tunnel (to go around firewall)
 )
 
@@ -162,7 +165,7 @@ def follow_object(x, y, w, h):
     center = x + w / 2
 
     # and follow the center of this object
-    if center > 440:  # if object is on the right, turn right towards it
+    if center > 450:  # if object is on the right, turn right towards it
         videocar.set_arcade_drive(0.1, -0.15)
         print("turning right, because center =", center)
 
@@ -171,7 +174,11 @@ def follow_object(x, y, w, h):
         print("turning left, because center =", center)
 
     else:  # otherwise the object is neither to the right, nor to the left -- we can go to it
-        videocar.set_arcade_drive(0.0, 0.0)
+        print("I want to go forward' width=", w)
+        if w > 200:
+            videocar.set_arcade_drive(0, 0)
+        else:
+            videocar.set_arcade_drive(0.4, 0.0)
         print("going forward, because center =", center)
 
 
@@ -192,19 +199,20 @@ while True:
 
     # 2a. keep tracking the object on this video frame, if we were tracking it before
     if tracking:
-        x, y, w, h = detection.update_tracker(tracker, frame)
+        x, y, w, h = detection.update_tracker(tracker, frame, lowest_allowed_score=0.4)
         if x is not None:
             last_seen_time = time()
             last_seen_x = x
         elif time() > last_seen_time + 2:
             tracking = False  # if not seen for >2s, assume we lost it
-            last_seen_x = None
 
     # 2b. and only if we do not see it with a tracker (x is None), try detecting it again
     if x is None:
-        #x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame, only_these_ids=[0, 1, 2, 3])
-        x, y, w, h = detection.detect_biggest_face(face_detector, frame)
-        if x is not None:
+        x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame, only_these_ids=[0, 1, 2, 3])
+        #x, y, w, h = detection.detect_biggest_face(face_detector, frame)
+        # x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames={"person"})
+        if x is  not None:
+            last_seen_x = x
             tracker.init(frame, (x, y, w, h))
             tracking = True
 
@@ -213,10 +221,18 @@ while True:
 
     # 3. if no object detected, stop the car and continue back to getting a video frame
     if x is None:
-        videocar.set_arcade_drive(-0.1, 0.15)
-        print("no tag => slowly turning")
+        t = time() # 60.9
+        nearest_second = int(t) # 60
+        fraction = t - nearest_second
+        if fraction < 0.5:
+            videocar.set_arcade_drive(0, 0)
+            print("stopped, because fraction = ", fraction)
+        elif last_seen_x is not None and last_seen_x > 400:
+            videocar.set_arcade_drive(-0.22, -0.06)
+            print("slowly turning right; last seen x = ", last_seen_x)
+        else:
+            videocar.set_arcade_drive(-0.22, 0.06)
+            print("slowly turning left; last seen x = ", last_seen_x)
         continue
 
     follow_object(x, y, w, h)
-
-```
