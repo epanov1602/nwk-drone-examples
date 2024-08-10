@@ -195,8 +195,10 @@ while True:
         x, y, w, h = detection.update_tracker(tracker, frame)
         if x is not None:
             last_seen_time = time()
+            last_seen_x = x
         elif time() > last_seen_time + 2:
             tracking = False  # if not seen for >2s, assume we lost it
+            last_seen_x = None
 
     # 2b. and only if we do not see it with a tracker (x is None), try detecting it again
     if x is None:
