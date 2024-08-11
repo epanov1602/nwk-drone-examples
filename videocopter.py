@@ -4,7 +4,7 @@ import numpy as np
 import detection
 
 
-def drone_follow_object_pids(drone: Tello, frame, bbox, target_width=0.2, kp_fwd=4.5, kp_turn=150, kp_updown=150):
+def drone_follow_object_pids(drone: Tello, frame, bbox, target_width=0.2, kp_fwd=6.0, kp_turn=90, kp_updown=150):
     """
     Sets Tello speed to follow the detected object, using a very primitive PID logic
     :param drone: a djitellopy.Tello
@@ -53,7 +53,7 @@ def drone_follow_object_pids(drone: Tello, frame, bbox, target_width=0.2, kp_fwd
     )
 
 
-def drone_follow_object_bang(drone: Tello, frame, bbox, target_width=0.2, max_up_speed=50, max_left_speed=50, max_fwd_speed=50):
+def drone_follow_object_bang(drone: Tello, frame, bbox, target_width=0.2, max_up_speed=50, max_left_speed=40, max_fwd_speed=90):
     """
     Sets Tello speed to follow the detected object, using a very primitive PID logic
     :param drone: a djitellopy.Tello
