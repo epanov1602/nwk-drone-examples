@@ -129,13 +129,20 @@ while True:
 
 ## Example 1C (driving a 4 wheel drive car, with buttons)
 
+[More Vehicle Coding here](README_vehicles.md)
+
 In `car_main.py` replace everything with this code:
 
 ```python
 import cv2
 import videocar
 
-videocar.start(simulation=False, motor_directions=(-1, -1), video_direction=-1)
+videocar.start(
+  simulation=False,
+  motor_directions=(-1, -1),
+  video_direction=-1,
+#  robot_hostname='localhost',
+)
 
 while True:
     key = cv2.waitKey(1) & 0xFF
