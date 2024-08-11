@@ -49,7 +49,7 @@ def main():
 
         # -- if saw it before and didn't lose it, just track the existing object by updating the tracker
         #if time_last_seen != 0:
-        #    x, y, w, h = detection.update_tracker(tracker, frame)
+        #    x, y, w, h = detection.update_tracker(tracker, frame, lowest_allowed_score=0.5)
         #    if x is not None:
         #        time_last_seen = time()  # if track is not lost, update the "last time seen"
         #    elif time() > time_last_seen + 1.0:
@@ -70,7 +70,8 @@ def main():
         if x is not None:
             # if object is seen, set speed towards it
             status = "CHASING"
-            videocopter.drone_follow_object_pids(drone, frame, bbox=(x, y, w, h))
+            #videocopter.drone_follow_object_pids(drone, frame, bbox=(x, y, w, h))
+            videocopter.drone_follow_object_bang(drone, frame, bbox=(x, y, w, h))
             last_seen_x = x
         elif last_seen_x is not None:
             # if not seen, try to slowly turn (ideally, in the direction where object was last seen)
