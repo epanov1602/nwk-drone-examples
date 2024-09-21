@@ -1,6 +1,5 @@
 import cv2
 from djitellopy import tello
-import pygame; pygame.init()
 
 drone = tello.Tello()
 drone.connect()
