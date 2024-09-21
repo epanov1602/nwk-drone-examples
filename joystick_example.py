@@ -22,12 +22,12 @@ while True:
         y_button = j0.get_button(3)
         a_button = j0.get_button(0)
 
-        if y_button: # did someone press "Y"? take off!
+        if y_button:  # did someone press "Y"? take off!
             drone.takeoff()
             drone.send_rc_control(0, 0, 0, 0)  # set speed to zero after takeoff (hang in one point)
             continue
 
-        if a_button: # did someone press "A"? land!
+        if a_button:  # did someone press "A"? land!
             drone.land()
             continue
 
