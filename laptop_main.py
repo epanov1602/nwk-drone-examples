@@ -1,13 +1,13 @@
 import cv2
 from time import time
 import pupil_apriltags as apriltags
-from ultralytics import YOLO
+#from ultralytics import YOLO
 import detection
 
 # what kind of objects can we detect?
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
-model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
+#model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
 
 tracker = detection.TrackerState(detection.create_vit_tracker(), display_confidence=True)
 
