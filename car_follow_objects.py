@@ -55,7 +55,7 @@ while True:
 
     # 2a. keep tracking the object on this video frame, if we were tracking it before
     if tracking:
-        x, y, w, h = detection.update_tracker(tracker, frame)
+        x, y, w, h, comments = detection.update_tracker(tracker, frame)
         if x is not None:
             last_seen_time = time()
         elif time() > last_seen_time + 2:

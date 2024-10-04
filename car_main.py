@@ -64,7 +64,7 @@ while True:
 
     # try to use our tracker, if it is set
     if tracking:
-        x, y, w, h = detection.update_tracker(tracker, frame)
+        x, y, w, h, comments = detection.update_tracker(tracker, frame)
         if x is not None:
             last_seen_time = time()
         elif time() > last_seen_time + 2:
@@ -75,7 +75,7 @@ while True:
         detection.print_relative_xw(frame, x, y, w, h)
 
     if chasing:
-        rel_x, rel_y, rel_w = detection.to_relative_xyw(frame, x, y, w, h)
+        rel_x, rel_y, rel_w = detection.to_relative_xyw_deprecated(frame, x, y, w, h)
 
         if rel_x is not None:
             # 1. if we see the object now, drive towards it

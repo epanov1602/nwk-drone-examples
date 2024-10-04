@@ -20,7 +20,7 @@ def drone_follow_object_pids(drone: Tello, frame, bbox, target_width=0.2, kp_fwd
     #  relative_x=-0.5 means object is all the way to the left, +0.5 means all the way to the right, 0 = middle
     #  relative_y=-0.5 means object is all the way to the bottom, +0.5 means all the way to the top, 0 = center
     x, y, w, h = bbox
-    relative_x, relative_y, relative_width = detection.to_relative_xyw(frame, x, y, w, h)
+    relative_x, relative_y, relative_width = detection.to_relative_xyw_deprecated(frame, x, y, w, h)
 
     # turn right if X>0, turn left if X<0
     yaw_speed = relative_x * kp_turn
@@ -66,7 +66,7 @@ def drone_follow_object_bang(drone: Tello, frame, bbox, target_width=0.2, max_up
     #  relative_x=-0.5 means object is all the way to the left, +0.5 means all the way to the right, 0 = middle
     #  relative_y=-0.5 means object is all the way to the bottom, +0.5 means all the way to the top, 0 = center
     x, y, w, h = bbox
-    relative_x, relative_y, relative_width = detection.to_relative_xyw(frame, x, y, w, h)
+    relative_x, relative_y, relative_width = detection.to_relative_xyw_deprecated(frame, x, y, w, h)
 
     # turn right if X>0, turn left if X<0
     yaw_speed, left_speed = 0, 0

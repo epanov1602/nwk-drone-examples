@@ -37,7 +37,7 @@ while True:
     x, y, w, h = None, None, None, None
 
     if tracking:
-        x, y, w, h = detection.update_tracker(tracker, frame, lowest_allowed_score=0.4)
+        x, y, w, h, comments = detection.update_tracker(tracker, frame, lowest_allowed_score=0.4)
         if x is None:
             if frame_count > time_last_seen + MAX_FRAMES_WITHOUT_TRACKER_OBJECT_OBSERVED:
                 tracking = False

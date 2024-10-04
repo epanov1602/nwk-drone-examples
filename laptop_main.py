@@ -6,9 +6,10 @@ import detection
 
 # what kind of objects can we detect?
 face_detector = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
-#model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
+model = YOLO("resources/yolov8s.pt")  # model to detect common objects like "person", "car", "cellphone" (see "COCO")
 tag_detector = apriltags.Detector(families="tag36h11", quad_sigma=0.2)
-tracker = detection.create_vit_tracker()
+
+tracker = detection.TrackerState(detection.create_vit_tracker(), display_confidence=True)
 
 
 camera = cv2.VideoCapture(0)
@@ -18,31 +19,21 @@ success, frame = camera.read()
 detecting = True
 time_last_seen = 0
 
+# location of the target
+x, y, w, h = None, None, None, None
+
 while True:
     success, frame = camera.read()
     if not success:
         continue
 
-    # location of the target
-    x, y, w, h = None, None, None, None
-
     if detecting:
-        x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame)
-        #x, y, w, h = detection.detect_biggest_face(face_detector, frame)
+        #x, y, w, h = detection.detect_biggest_face(face_detector, frame, tracker=tracker, previous_xywh=(x, y, w, h))
+        x, y, w, h = detection.detect_biggest_apriltag(tag_detector, frame, tracker=tracker)
         #x, y, w, h = detection.detect_yolo_object(model, frame, valid_classnames={"cell phone"}, lowest_conf=0.3)
-        if x is not None:  # if detected something, feed it into the tracker
-            tracker.init(frame, (x, y, w, h))
-            time_last_seen = time()
+        #x, y, w, h = detection.detect_yolo_object(model, frame, tracker=tracker, valid_classes={"cell phone"}, lowest_conf=0.3)
 
-    if time_last_seen != 0:
-        x, y, w, h = detection.update_tracker(tracker, frame)
-        if x is not None:
-            time_last_seen = time()
-        elif time() > time_last_seen + 3.0:
-            time_last_seen = 0  # assume we can no longer track our detection.py, if we have not tracked it for 3s
-
-    status = "DETECTING..." if detecting else "TRACKING..." if time_last_seen != 0 else "LOST!"
-    cv2.putText(frame, status, (5, 25), cv2.FONT_HERSHEY_PLAIN, 2, detection.GREEN, 2)
+    nx, ny, size = detection.to_normalized_x_y_size(frame, x, y, w, h, draw_box=True)
     cv2.imshow("camera", frame)
 
     key = cv2.waitKey(1) & 0xFF
